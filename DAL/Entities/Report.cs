@@ -5,12 +5,11 @@ namespace DAL.Entities;
 public class Report
 {
     public int Id { get; set; }
-    public string Title { get; set; } = null!;
-    public DateTime CreatedAt { get; set; }
-    public ReportStatus Status { get; set; }
-
     public int EmployeeId { get; set; }
-    public Employee Employee { get; set; } = null!;
-    
+    public Employee Employee { get; set; }
+    public DateTime CreateDate { get; set; }
+    public string Content { get; set; }
+    public bool IsPrinted { get; set; }
+    public ReportStatus Status { get; set; }
     public ICollection<Indicator> Indicators { get; set; } = new List<Indicator>();
 }

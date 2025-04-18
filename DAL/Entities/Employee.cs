@@ -1,9 +1,12 @@
+using CCL.Security.Identity;
+
 namespace DAL.Entities;
 
 public class Employee
 {
     public int Id { get; set; }
-    public string FullName { get; set; } = null!;
-    public string Position { get; set; } = null!;
-    public ICollection<Report> Reports { get; set; } = new List<Report>();
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public string PhoneNumber { get; set; }
+    public Role Role { get; set; }
 }
