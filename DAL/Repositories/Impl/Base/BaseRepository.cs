@@ -1,47 +1,47 @@
-using DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace DAL.Repositories.Impl.Base;
-
-public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : class
+namespace DAL.Repositories.Impl.Base
 {
-    protected readonly DbContext _context;
-    protected readonly DbSet<TEntity> _dbSet;
-
-    public BaseRepository(DbContext context)
+    public class BaseRepository<T> where T : class
     {
-        _context = context;
-        _dbSet = context.Set<TEntity>();
-    }
+        protected readonly DbContext _context;
+        protected readonly DbSet<T> _dbSet;
 
-    public async Task<IEnumerable<TEntity>> GetAllAsync()
-    {
-        return await _dbSet.ToListAsync();
-    }
+        public BaseRepository(DbContext context)
+        {
+            _context = context;
+            _dbSet = context.Set<T>();
+        }
 
-    public async Task<TEntity?> GetByIdAsync(int id)
-    {
-        return await _dbSet.FindAsync(id);
-    }
+        public virtual async Task<IEnumerable<T>> GetAllAsync()
+        {
+            return await _dbSet.ToListAsync();
+        }
 
-    public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
-    {
-        return await _dbSet.Where(predicate).ToListAsync();
-    }
+        public virtual async Task<T?> GetByIdAsync(int id)
+        {
+            return await _dbSet.FindAsync(id);
+        }
 
-    public async Task AddAsync(TEntity entity)
-    {
-        await _dbSet.AddAsync(entity);
-    }
+        public virtual async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.Where(predicate).ToListAsync();
+        }
 
-    public void Update(TEntity entity)
-    {
-        _dbSet.Update(entity);
-    }
+        public virtual async Task AddAsync(T entity)
+        {
+            await _dbSet.AddAsync(entity);
+        }
 
-    public void Remove(TEntity entity)
-    {
-        _dbSet.Remove(entity);
+        public virtual void Update(T entity)
+        {
+            _dbSet.Update(entity);
+        }
+
+        public virtual void Remove(T entity)
+        {
+            _dbSet.Remove(entity);
+        }
     }
 }
