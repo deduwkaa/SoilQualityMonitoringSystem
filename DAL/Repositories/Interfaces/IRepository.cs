@@ -1,13 +1,11 @@
-using System.Linq.Expressions;
-
 namespace DAL.Repositories.Interfaces;
 
-public interface IRepository<TEntity> where TEntity : class
+public interface IRepository<T> where T : class
 {
-    Task<IEnumerable<TEntity>> GetAllAsync();
-    Task<TEntity?> GetByIdAsync(int id);
-    Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
-    Task AddAsync(TEntity entity);
-    void Update(TEntity entity);
-    void Remove(TEntity entity);
+    Task<IEnumerable<T>> GetAll();
+    Task<T?> GetById(int id);
+    IEnumerable<T> Find(Func<T, bool> predicate, int pageNumber, int pageSize);
+    Task Create(T entity);
+    void Update(T entity);
+    Task Delete(int id);
 }
