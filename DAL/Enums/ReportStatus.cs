@@ -2,9 +2,9 @@ namespace DAL.Enums;
 
 public enum ReportStatus
 {
-    Draft,
-    Submitted,
-    Reviewed,
+    Draft,     
+    UnderReview,
     Approved,
-    Rejected
+    Rejected,  
+    Archived
 }

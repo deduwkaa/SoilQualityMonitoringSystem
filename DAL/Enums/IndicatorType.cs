@@ -2,7 +2,9 @@ namespace DAL.Enums;
 
 public enum IndicatorType
 {
-    Radiation,
-    Chemical,
-    Biological
+    CO2,
+    CO,
+    NOx,
+    SO2,
+    O3
 }
