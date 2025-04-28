@@ -1,47 +1,51 @@
+using DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
-namespace DAL.Repositories.Impl.Base
+namespace DAL.Repositories.Impl.Base;
+
+public class BaseRepository<T> : IRepository<T> where T : class
 {
-    public class BaseRepository<T> where T : class
+    private readonly DbSet<T> _set;
+
+    public BaseRepository(DbContext context)
     {
-        protected readonly DbContext _context;
-        protected readonly DbSet<T> _dbSet;
+        _set = context.Set<T>();
+    }
 
-        public BaseRepository(DbContext context)
-        {
-            _context = context;
-            _dbSet = context.Set<T>();
-        }
+    public async Task Create(T entity)
+    {
+        await _set.AddAsync(entity);
+    }
 
-        public virtual async Task<IEnumerable<T>> GetAllAsync()
-        {
-            return await _dbSet.ToListAsync();
-        }
+    public async Task<T?> GetById(int id)
+    {
+        return await _set.FindAsync(id);
+    }
 
-        public virtual async Task<T?> GetByIdAsync(int id)
-        {
-            return await _dbSet.FindAsync(id);
-        }
+    public async Task Delete(int id)
+    {
+        var entity = await GetById(id);
+        _set.Remove(entity);
+    }
 
-        public virtual async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
-        {
-            return await _dbSet.Where(predicate).ToListAsync();
-        }
+    public async Task<IEnumerable<T>> GetAll()
+    {
+        return await _set.ToListAsync();
+    }
 
-        public virtual async Task AddAsync(T entity)
-        {
-            await _dbSet.AddAsync(entity);
-        }
+    public void Update(T entity)
+    {
+        _set.Update(entity);
+    }
 
-        public virtual void Update(T entity)
-        {
-            _dbSet.Update(entity);
-        }
-
-        public virtual void Remove(T entity)
-        {
-            _dbSet.Remove(entity);
-        }
+    public IEnumerable<T> Find(
+        Func<T, bool> predicate,
+        int pageNumber = 0,
+        int pageSize = 10)
+    {
+        return _set.Where(predicate)
+            .Skip(pageSize * pageNumber)
+            .Take(pageNumber)
+            .ToList();
     }
 }
