@@ -1,12 +1,12 @@
-using CCL.Security.Identity;
+using DAL.Enums;
 
 namespace DAL.Entities;
 
-public class Employee
+public partial class Indicator
 {
     public int Id { get; set; }
     public string Name { get; set; }
-    public string Email { get; set; }
-    public string PhoneNumber { get; set; }
-    public Role Role { get; set; }
+    public double Value { get; set; }
+    public IndicatorType Type { get; set; }
+    public DateTime CollectedDate { get; set; }
 }
