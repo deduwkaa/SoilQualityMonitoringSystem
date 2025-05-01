@@ -1,4 +1,11 @@
+using BLL.Profiles;
+using BLL.Services.Impl;
+using BLL.Services.Interfaces;
 using DAL.Data;
+using DAL.Repositories.Impl;
+using DAL.Repositories.Impl.Base;
+using DAL.Repositories.Interfaces;
+using DAL.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,9 +17,24 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnection"));
+});
+
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IIndicatorRepository, IndicatorRepository>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IIndicatorService, IndicatorService>();
+builder.Services.AddScoped<IReportService, ReportService>();
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+
+builder.Services.AddScoped<IUnitOfWork, EFUnitOfWork>();
+
+builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
 var app = builder.Build();
 
