@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection"));
 });
 
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
